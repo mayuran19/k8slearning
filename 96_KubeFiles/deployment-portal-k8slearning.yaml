@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: portal-deployment # This is the name of the deployment, when you execute the kubectl get deployments, the name from here appear there
+  labels:
+    app: portal-app-deployment # This is the label to identify the deployment itself, in case if you want to delete a deployment, you can use kubectl delete deployment -l app=inventory
+spec:
+  selector:
+    matchLabels:
+      app: portal-app
+  replicas: 3
+  template: # The template here is specifying the pod template, the pod going to be created will have the name inventory-app
+    metadata:
+      labels:
+        app: portal-app #the created pods will match this lable app
+        env: development
+    spec:
+      containers:
+      - name: portal-app-container
+        image: mayuran19/k8slearning-portal:v1
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "100m"
+        ports:
+        - containerPort: 8080

@@ -1,0 +1,43 @@
+1. Create new folder
+mkdir -p /Users/mayuran/Workspace/K8S/01_Learning/99_Installation/bin
+
+2. Download minikube binary
+curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-darwin-amd64
+
+3. Make minikube executable
+chmod +x minikube
+
+4. Download kubectl
+curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.18.2/bin/darwin/amd64/kubectl
+
+5. Make kubectl executable
+chmod +x ./kubectl
+
+6. Setup environment variable to use the specific version of minikube and kubectl
+export MINIKUBE_HOME=/Users/mayuran/Workspace/K8S/01_Learning/99_Installation
+export PATH=$MINIKUBE_HOME/bin:$PATH
+export KUBECONFIG=$MINIKUBE_HOME/.kube/config
+export KUBE_EDITOR="code -w"
+
+7. Startup minikube
+minikube --profile k8slearning config set memory 6144
+minikube --profile k8slearning config set cpus 2
+minikube --profile k8slearning config set vm-driver virtualbox
+minikube --profile k8slearning config set kubernetes-version v1.18.2
+minikube start --profile k8slearning
+
+8. Set the profile to k8slearning
+minikube profile k8slearning
+
+9. Set the docker context to the minikube
+eval $(minikube -p k8slearning docker-env)
+
+10. Deploy an application
+kubectl create deployment k8slearning-bootapp --image=mayuran19/k8slearning-bootapp:v1
+
+11. Expose application as service
+kubectl expose deployment k8slearning-bootapp --port=8080 --type=LoadBalancer
+
+12. Delete/Cleanup resources
+kubectl delete service k8slearning-bootapp
+kubectl delete deployment k8slearning-bootapp
